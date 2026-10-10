@@ -23,7 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run game simulations (sanity check)
-        run: node games/ashfall/sim.mjs --quick
+        run: |
+          node games/ashfall/sim.mjs --quick
+          node games/tenure/sim.mjs --quick
       - uses: actions/configure-pages@v5
         with:
           enablement: true

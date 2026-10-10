@@ -36,6 +36,19 @@ them sets par, and your rating is relative to it.
 - `sim.mjs`: headless simulation for balancing. `node games/ashfall/sim.mjs 2000` prints score
   distributions; `--trace <seed>` logs one bot game; `--quick` is what CI runs.
 
+### Tenure
+
+A 2-4 player deckbuilder about academic life, playable hot-seat or against bots. Four scoring
+tracks (Research, Teaching, Service, Prestige), Innovation-style first-come Honors, and a CV:
+publish a played card to remove it from your deck and keep its icons as seniority, which decides
+whom your demand and share effects reach. Eight asymmetric roles.
+
+- `engine.js`: multi-player rules, no DOM.
+- `cards.js`: cards, roles and honors.
+- `bots.js`: AI opponents (six strategies).
+- `sim.mjs`: balance simulation. `node games/tenure/sim.mjs 1000 3` reports win rate by role,
+  strategy and seat for 1000 three-player games; `--quick` is what CI runs.
+
 ## Local development
 
 Any static server works:

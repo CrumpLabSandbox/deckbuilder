@@ -14,4 +14,17 @@ export const GAMES = [
     length: '10-15 min',
     status: 'playable',
   },
+  {
+    slug: 'tenure',
+    title: 'Tenure',
+    tagline: 'Research, Teaching, Service, Prestige. Pick a lane, or pick four.',
+    description:
+      'A 2-4 player deckbuilder about academic life, hot-seat or against bots. Publish cards ' +
+      'to your CV for seniority, drop committee work on the juniors, and race for first-come ' +
+      'Honors. Eight asymmetric roles, from Graduate Student to Provost, balanced by simulation.',
+    tags: ['2-4 players', 'hot-seat', 'bots', 'asymmetric roles'],
+    players: '2-4',
+    length: '20-30 min',
+    status: 'playable',
+  },
 ];
