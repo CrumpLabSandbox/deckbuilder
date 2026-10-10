@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Deckhouse</title>
+  <link rel="stylesheet" href="platform/platform.css" />
+  <style>
+    .wrap { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
+    header.hero { margin-bottom: 28px; }
+    header.hero h1 {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      margin: 0 0 6px;
+      letter-spacing: 0.5px;
+    }
+    header.hero p { color: var(--muted); margin: 0; max-width: 60ch; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card {
+      display: flex; flex-direction: column; gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .card h2 { margin: 0; font-family: var(--font-display); font-size: 1.5rem; }
+    .card .tagline { color: var(--accent); margin: 0; }
+    .card .desc { color: var(--muted); margin: 0; font-size: 0.95rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+    .tag {
+      font-size: 0.75rem; padding: 2px 8px; border-radius: 999px;
+      background: var(--panel-2); border: 1px solid var(--line); color: var(--muted);
+    }
+    .tag.status-playable { color: var(--good); border-color: var(--good); }
+    .tag.status-wip { color: var(--accent-2); border-color: var(--accent-2); }
+    .card.soon {
+      border-style: dashed; color: var(--muted); justify-content: center; align-items: center;
+      text-align: center; min-height: 160px;
+    }
+    footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+    footer code { background: var(--bg-2); padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>The Deckhouse</h1>
+      <p>A shelf of deckbuilder games you can play in the browser. Each one is a small, self-contained experiment. Pick one and sit down.</p>
+    </header>
+    <main class="grid" id="games"></main>
+    <footer>
+      To add a game, drop a folder into <code>games/</code> and register it in <code>games/registry.js</code>.
+    </footer>
+  </div>
+  <script type="module">
+    import { GAMES } from './games/registry.js';
+    const grid = document.getElementById('games');
+    for (const g of GAMES) {
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = `games/${g.slug}/`;
+      const tags = [...(g.tags || []).map(t => `<span class="tag">${t}</span>`)];
+      if (g.players) tags.push(`<span class="tag">${g.players} player${g.players === '1' ? '' : 's'}</span>`);
+      if (g.length) tags.push(`<span class="tag">${g.length}</span>`);
+      if (g.status) tags.push(`<span class="tag status-${g.status}">${g.status}</span>`);
+      a.innerHTML = `
+        <h2>${g.title}</h2>
+        <p class="tagline">${g.tagline}</p>
+        <p class="desc">${g.description}</p>
+        <div class="meta">${tags.join('')}</div>`;
+      grid.appendChild(a);
+    }
+    const soon = document.createElement('div');
+    soon.className = 'card soon';
+    soon.textContent = 'Next game goes here';
+    grid.appendChild(soon);
+  </script>
+</body>
+</html>
