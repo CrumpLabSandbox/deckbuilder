@@ -27,6 +27,7 @@ jobs:
           node games/ashfall/sim.mjs --quick
           node games/tenure/sim.mjs --quick
           node games/pips/sim.mjs --quick
+          node games/spite/sim.mjs --quick
       - uses: actions/configure-pages@v5
         with:
           enablement: true

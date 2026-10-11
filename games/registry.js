@@ -40,4 +40,17 @@ export const GAMES = [
     length: '20 min',
     status: 'playable',
   },
+  {
+    slug: 'spite',
+    title: 'Spite and Malice',
+    tagline: 'The two-player competitive patience, also called Cat and Mouse.',
+    description:
+      'Empty your 20-card pay-off pile before your opponent does. Build shared piles from Ace to ' +
+      'Queen, Kings wild, and use your four side stacks to bury what they need. Play against a bot ' +
+      'or hot-seat with a friend.',
+    tags: ['2 players', 'classic', 'bot', 'hot-seat'],
+    players: '2',
+    length: '15-25 min',
+    status: 'playable',
+  },
 ];

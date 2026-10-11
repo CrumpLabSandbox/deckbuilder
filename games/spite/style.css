@@ -1,0 +1,45 @@
+:root { --card-w: 70px; --card-h: 98px; }
+body { background: radial-gradient(900px 500px at 50% 40%, #1e3f33 0%, var(--bg) 70%); }
+.app { max-width: 1100px; margin: 0 auto; padding: 12px 16px 48px; }
+section.panel { background: rgba(29,33,41,0.85); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 12px; }
+section.panel h3 { margin: 0 0 8px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+section.panel h3 .hint { text-transform: none; letter-spacing: 0; font-weight: normal; }
+section.panel.active { border-color: var(--accent); }
+.zone { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start; }
+.group { display: flex; flex-direction: column; gap: 4px; }
+.group .lbl { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.pcard { position: relative; overflow: hidden; width: var(--card-w); height: var(--card-h); background: #f6f2e8; color: #222; border-radius: 7px; border: 1px solid #c9c2b0; padding: 5px; display: flex; flex-direction: column; justify-content: space-between; user-select: none; box-shadow: 0 2px 6px rgba(0,0,0,0.35); font-family: var(--font-display); transition: transform 0.1s, box-shadow 0.1s; }
+.pcard.red { color: #b3262e; }
+.pcard .corner { font-size: 0.95rem; line-height: 1; font-weight: 700; }
+.pcard .pip { font-size: 1.7rem; text-align: center; line-height: 1; }
+.pcard.back { background: repeating-linear-gradient(45deg, #3b5a86 0 6px, #2e4a70 6px 12px); border-color: #223a5c; }
+.pcard.empty { background: rgba(255,255,255,0.06); border: 1px dashed var(--line); box-shadow: none; color: var(--muted); font-family: var(--font); font-size: 0.72rem; align-items: center; justify-content: center; text-align: center; }
+.pcard.wild::after { content: 'wild'; position: absolute; bottom: 4px; right: 5px; font: 0.6rem var(--font); color: #777; }
+.pcard.clickable { cursor: pointer; }
+.pcard.clickable:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.45); }
+.pcard.selected { outline: 3px solid var(--good); transform: translateY(-4px); }
+.pcard.target { outline: 3px solid var(--accent); cursor: pointer; }
+.pcard.target:hover { transform: translateY(-3px); }
+.count { position: absolute; top: 3px; right: 5px; font: 700 0.65rem var(--font); color: #555; background: rgba(255,255,255,0.7); border-radius: 8px; padding: 0 5px; }
+.pcard.back .count, .pcard.empty .count { color: var(--text); background: rgba(0,0,0,0.4); }
+.stackwrap { position: relative; }
+.stackwrap .under { position: absolute; left: 0; top: 0; }
+.center-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.center-row .needs { font-size: 0.7rem; color: var(--muted); text-align: center; margin-top: 3px; }
+.status { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.status b { font-family: var(--font-display); font-size: 1.15rem; }
+.controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+.controls .spacer { flex: 1; }
+.log { font-size: 0.78rem; max-height: 180px; overflow: auto; color: var(--muted); }
+.log p { margin: 2px 0; }
+.overlay { position: fixed; inset: 0; background: rgba(5,5,8,0.8); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.modal { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; max-width: 760px; width: 100%; max-height: 92vh; overflow: auto; }
+.modal h2 { margin: 0 0 6px; font-family: var(--font-display); }
+.modal .sub { color: var(--muted); margin: 0 0 14px; }
+.modal .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.modal .rules h4 { margin: 14px 0 4px; color: var(--accent); }
+.seat { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 8px; }
+.seat select { font: inherit; color: var(--text); background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; }
+.thinking { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+@media (max-width: 640px) { :root { --card-w: 56px; --card-h: 78px; } .pcard .pip { font-size: 1.3rem; } }

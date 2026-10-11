@@ -56,6 +56,13 @@ the job (Diamonds money, Clubs draw, Spades trash, Hearts points), rank is the s
 is the printable rules sheet for playing with real cards; `index.html` plays it in the browser
 against bots or hot-seat. `node games/pips/sim.mjs 2000` checks pace and seat balance.
 
+### Spite and Malice
+
+The classic two-player competitive patience (Cat and Mouse), to the common two-deck rules:
+20-card pay-off piles, three center piles built Ace to Queen, Kings wild, four side stacks.
+Against a bot or hot-seat. `node games/spite/sim.mjs` checks that bot games terminate and that
+the starting player has no edge.
+
 ## Local development
 
 Any static server works:
