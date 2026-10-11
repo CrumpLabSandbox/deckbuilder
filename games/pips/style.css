@@ -1,0 +1,51 @@
+:root { --felt: #1f3b2d; --card-w: 88px; --card-h: 126px; }
+body { background: radial-gradient(900px 500px at 50% -100px, #2b4d3a 0%, var(--bg) 65%); }
+.app { max-width: 1200px; margin: 0 auto; padding: 12px 16px 48px; }
+section.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 14px; }
+section.panel h3 { margin: 0 0 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+section.panel h3 .hint { text-transform: none; letter-spacing: 0; font-weight: normal; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.row.empty::after { content: attr(data-empty); color: var(--muted); font-size: 0.85rem; padding: 8px 2px; }
+.players { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 10px 0; }
+.pbox { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 12px; }
+.pbox.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.pbox b { font-family: var(--font-display); font-size: 1.05rem; }
+.pbox .pts { font-size: 1.5rem; font-family: var(--font-display); color: var(--good); }
+.pbox .meta { font-size: 0.78rem; color: var(--muted); }
+.pcard { position: relative; overflow: hidden; width: var(--card-w); height: var(--card-h); background: #f5f1e6; color: #222; border-radius: 8px; border: 1px solid #c9c2b0; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; user-select: none; box-shadow: 0 2px 6px rgba(0,0,0,0.35); transition: transform 0.1s, box-shadow 0.1s; font-family: var(--font-display); }
+.pcard.red { color: #b3262e; }
+.pcard .corner { font-size: 0.95rem; line-height: 1; font-weight: 700; }
+.pcard .corner.bottom { transform: rotate(180deg); align-self: flex-end; }
+.pcard .pip { font-size: 1.6rem; text-align: center; line-height: 1; }
+.pcard .eff { font-family: var(--font); font-size: 0.58rem; color: #555; text-align: center; line-height: 1.1; }
+.pcard .costb { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #1a1205; font: 700 0.72rem var(--font); display: grid; place-items: center; }
+.pcard.clickable { cursor: pointer; }
+.pcard.clickable:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.45); }
+.pcard.dim { opacity: 0.5; }
+.pcard.affordable { outline: 2px solid var(--accent); }
+.pcard.selected { outline: 3px solid var(--good); transform: translateY(-4px); }
+.pcard.mini { width: 54px; height: 76px; }
+.pcard.mini .eff, .pcard.mini .corner.bottom { display: none; }
+.pcard.mini .pip { font-size: 1.3rem; }
+.controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 8px 0 4px; }
+.controls .spacer { flex: 1; }
+.coins { font-family: var(--font-display); font-size: 1.4rem; }
+.coins small { font-family: var(--font); font-size: 0.75rem; color: var(--muted); }
+.main { display: grid; grid-template-columns: 1fr 280px; gap: 14px; }
+@media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
+.log { font-size: 0.78rem; max-height: 420px; overflow: auto; color: var(--muted); }
+.log .d { color: var(--accent); margin-top: 6px; font-weight: 600; }
+.log p { margin: 2px 0; }
+.overlay { position: fixed; inset: 0; background: rgba(5, 5, 8, 0.8); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.modal { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; max-width: 860px; width: 100%; max-height: 92vh; overflow: auto; }
+.modal h2 { margin: 0 0 6px; font-family: var(--font-display); }
+.modal .sub { color: var(--muted); margin: 0 0 14px; }
+.modal .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.seat { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 8px; }
+.seat select { font: inherit; color: var(--text); background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; }
+.cheat { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 8px; }
+.cheat td, .cheat th { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.cheat .red { color: #e36a6a; }
+.ranking { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.ranking td, .ranking th { padding: 5px 6px; border-bottom: 1px solid var(--line); text-align: left; }
+.thinking { font-size: 0.85rem; color: var(--muted); font-style: italic; }

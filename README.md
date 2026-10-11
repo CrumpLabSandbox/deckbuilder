@@ -49,6 +49,13 @@ whom your demand and share effects reach. Eight asymmetric roles.
 - `sim.mjs`: balance simulation. `node games/tenure/sim.mjs 1000 3` reports win rate by role,
   strategy and seat for 1000 three-player games; `--quick` is what CI runs.
 
+### Pips
+
+A deckbuilder for 2-4 players with two ordinary packs of playing cards, about 20 minutes. Suit is
+the job (Diamonds money, Clubs draw, Spades trash, Hearts points), rank is the size. `rules.html`
+is the printable rules sheet for playing with real cards; `index.html` plays it in the browser
+against bots or hot-seat. `node games/pips/sim.mjs 2000` checks pace and seat balance.
+
 ## Local development
 
 Any static server works:

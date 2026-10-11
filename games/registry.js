@@ -27,4 +27,17 @@ export const GAMES = [
     length: '20-30 min',
     status: 'playable',
   },
+  {
+    slug: 'pips',
+    title: 'Pips',
+    tagline: 'A deckbuilder for two ordinary packs of cards.',
+    description:
+      'Suit is the job, rank is the size. Diamonds make money, Clubs draw, Spades cut junk, Hearts ' +
+      'are points. Learn it in two minutes, play it in twenty with real cards, or deal a table here ' +
+      'against bots. Comes with a printable rules sheet.',
+    tags: ['2-4 players', 'real cards', 'printable rules', 'hot-seat', 'bots'],
+    players: '2-4',
+    length: '20 min',
+    status: 'playable',
+  },
 ];

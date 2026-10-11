@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pips rules</title>
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; max-width: 760px; margin: 0 auto; padding: 24px 20px 48px; color: #111; background: #fff; line-height: 1.4; }
+    h1 { margin: 0 0 2px; font-size: 2rem; }
+    .sub { color: #555; margin: 0 0 18px; font-style: italic; }
+    h2 { font-size: 1.1rem; margin: 18px 0 6px; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #ddd; vertical-align: top; }
+    th { background: #f3f0e8; }
+    .red { color: #b3262e; }
+    ol, ul { margin: 4px 0 4px 20px; padding: 0; }
+    li { margin: 2px 0; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+    .nav { font-family: system-ui, sans-serif; font-size: 0.85rem; margin-bottom: 12px; }
+    @media print { .nav { display: none; } body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="nav"><a href="./">← Play Pips in the browser</a> · <a href="../../">The Deckhouse</a> · <a href="#" onclick="window.print();return false;">Print</a></div>
+  <h1>Pips</h1>
+  <p class="sub">A deckbuilder for 2–4 players, with two ordinary packs of cards. About 20 minutes.</p>
+
+  <h2>What you need</h2>
+  <p>Two standard 52-card packs (jokers removed), and some way to count coins during a turn (fingers are fine).</p>
+
+  <h2>The idea</h2>
+  <p>Everyone starts with the same small deck of weak cards. Each turn you play your hand for coins and use the coins to buy better cards, which go into your deck. <b>The suit of a card is its job; its rank is its size.</b> Diamonds make money, Clubs draw cards, Spades cut weak cards out of your deck, and Hearts are the points you need to win.</p>
+
+  <h2>Setup</h2>
+  <ol>
+    <li>Pull out every <b>2, 3, 4 and 5</b>. Give each player two of each rank (8 cards). Suits don't matter for these. Each player shuffles them into a face-down deck.</li>
+    <li>Shuffle all the remaining cards together into the <b>market deck</b>. Turn the top 5 face up in a row: the <b>market</b>.</li>
+    <li>Everyone draws 5 cards. The player after the first player, and everyone after them, draws 6 cards for their first turn only.</li>
+    <li>With 2 or 3 players, leave the unused starting cards in the box.</li>
+  </ol>
+
+  <h2>The cards</h2>
+  <table>
+    <tr><th>Card</th><th>Cost</th><th>When you play it</th></tr>
+    <tr><td>2, 3, 4, 5 (any suit)</td><td>—</td><td>+1 coin</td></tr>
+    <tr><td class="red">♦ 6–10</td><td>4</td><td>+2 coins</td></tr>
+    <tr><td class="red">♦ J, Q, K</td><td>7</td><td>+3 coins</td></tr>
+    <tr><td>♣ 6–10</td><td>4</td><td>+1 card, +1 coin</td></tr>
+    <tr><td>♣ J, Q, K</td><td>7</td><td>+2 cards, +1 coin</td></tr>
+    <tr><td>♠ 6–10</td><td>4</td><td>You may trash a card from your hand. If you do, +2 coins.</td></tr>
+    <tr><td>♠ J, Q, K</td><td>7</td><td>Trash up to 2 cards from your hand. +2 coins for each.</td></tr>
+    <tr><td class="red">♥ 6–10</td><td>4</td><td>Nothing. Worth <b>3 points</b> at the end.</td></tr>
+    <tr><td class="red">♥ J, Q, K</td><td>7</td><td>Nothing. Worth <b>6 points</b> at the end.</td></tr>
+    <tr><td>Ace (any suit)</td><td>6</td><td>+1 card, +2 coins</td></tr>
+  </table>
+  <p><i>Trash</i> means remove the card from the game for good (make a trash pile beside the market). <i>Draw</i> means take cards from your own deck; if it runs out, shuffle your discard pile to make a new deck.</p>
+
+  <h2>Your turn</h2>
+  <ol>
+    <li><b>Play your whole hand</b>, one card at a time, in any order you like. Count the coins. Cards you draw along the way are played too.</li>
+    <li><b>Buy</b> any number of cards from the market with your coins. Bought cards go face up on your discard pile. Each time you take a card, refill the market from the market deck.</li>
+    <li>If you bought <b>nothing</b>, you may put the whole market on the trash pile and deal 5 fresh cards.</li>
+    <li><b>Clean up:</b> put your hand and everything you played on your discard pile, then draw 5 cards. Unspent coins are lost.</li>
+  </ol>
+
+  <h2>End of the game</h2>
+  <p>The game ends at the end of the round (so everyone has had the same number of turns) when any of these happens:</p>
+  <ul>
+    <li>the last face Heart (J, Q or K of Hearts; there are six) is bought,</li>
+    <li>the market deck runs out, or</li>
+    <li>the 12th round is finished.</li>
+  </ul>
+  <p>Count the points on every Heart you own, in your deck, hand and discard pile. <b>Most points wins.</b> Ties go to the player with fewer cards.</p>
+
+  <div class="two">
+    <div>
+      <h2>Tips</h2>
+      <ul>
+        <li>Your first buys should make money: Diamonds, or a Spade to cut out 2s and 3s.</li>
+        <li>Hearts do nothing when drawn. Buy them late, when your deck already makes 7 coins.</li>
+        <li>A face Heart is 6 points for 7 coins. Two number Hearts are 6 points for 8 coins and clog your deck twice as much.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Variants</h2>
+      <ul>
+        <li><b>Sharper Spades:</b> face Spades also make the next player discard a card.</li>
+        <li><b>Longer game:</b> use 15 rounds and shuffle the four Jokers in as Aces.</li>
+        <li><b>Duel:</b> with 2 players, remove one pack's face Hearts (three left).</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
