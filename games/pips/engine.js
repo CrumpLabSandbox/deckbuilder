@@ -100,6 +100,13 @@ function next(G) {
     G.round++;
     log(G, `Round ${G.round}.`);
   }
+  // The market moves: the oldest card slides off into the trash and a new one is dealt.
+  if (G.deck.length && G.row.length && !(G.round === 1 && G.turn === 0)) {
+    const gone = G.row.shift();
+    G.trash.push(gone);
+    refill(G);
+    log(G, `${cardName(gone)} slides out of the market.`);
+  }
   G.coins = 0; G.bought = 0; G.phase = 'main';
 }
 
@@ -149,15 +156,6 @@ export function buy(G, i) {
   log(G, `${p.name} buys ${cardName(c)} for ${cost(c)}.`);
   refill(G);
   if (c.suit === 'H' && tier(c) === 'face' && faceHeartsLeft(G) === 0 && !G.finalRound) { G.finalRound = true; G.endReason = 'The last face heart is gone.'; log(G, 'The last face heart is gone. This round is the last.'); }
-  return true;
-}
-
-export function canRefresh(G) { return !G.pending && G.phase === 'main' && G.bought === 0 && G.deck.length > 0; }
-export function refreshRow(G) {
-  if (!canRefresh(G)) return false;
-  G.trash.push(...G.row); G.row = []; refill(G);
-  G.bought = -1; // a refresh counts as the turn's purchase
-  log(G, `${cur(G).name} refreshes the market.`);
   return true;
 }
 

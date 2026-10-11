@@ -1,4 +1,4 @@
-import { cur, playAll, buy, canBuy, canRefresh, refreshRow, endTurn, resolvePending, cost, tier, vp, faceHeartsLeft, MAX_ROUNDS } from './engine.js';
+import { cur, playAll, buy, canBuy, endTurn, resolvePending, cost, tier, vp, faceHeartsLeft, MAX_ROUNDS } from './engine.js';
 
 export const STRATEGIES = ['money', 'blades', 'hands', 'greedy'];
 
@@ -34,6 +34,5 @@ export function botTurn(G) {
     opts.sort((a, b) => b.v - a.v);
     buy(G, opts[0].i);
   }
-  if (G.bought === 0 && canRefresh(G)) refreshRow(G);
   endTurn(G);
 }

@@ -1,4 +1,4 @@
-import { newGame, cur, playCard, playAll, buy, canBuy, canRefresh, refreshRow, endTurn, resolvePending, cost, tier, vp, effectText, cardName, score, deckSize, faceHeartsLeft, SUIT_INFO, rankName, MAX_ROUNDS } from './engine.js';
+import { newGame, cur, playCard, playAll, buy, canBuy, endTurn, resolvePending, cost, tier, vp, effectText, cardName, score, deckSize, faceHeartsLeft, SUIT_INFO, rankName, MAX_ROUNDS } from './engine.js';
 import { botTurn, STRATEGIES } from './bots.js';
 import { todaySeed } from '../../platform/rng.js';
 
@@ -59,13 +59,12 @@ function render() {
   tbl.append(hand);
   tbl.append(h('div', { class: 'controls' }, h('div', { class: 'coins' }, `🪙 ${G.coins} `, h('small', {}, 'coins')),
     h('button', { onclick: () => act(() => playAll(G)), disabled: !me || !p.hand.length }, 'Play all'),
-    h('button', { onclick: () => act(() => refreshRow(G)), disabled: !me || !canRefresh(G), title: 'Only if you bought nothing this turn' }, 'Refresh market'),
     h('span', { class: 'spacer' }),
     h('button', { class: 'primary', onclick: () => { act(() => endTurn(G)); if (G.phase !== 'over' && cur(G).kind === 'human' && humans() > 1) { passScreen = true; render(); } }, disabled: !me || !!G.pending }, 'End turn')));
   left.append(tbl);
   // market
   const mk = h('section', { class: 'panel' });
-  mk.append(h('h3', {}, 'Market', h('span', { class: 'hint' }, 'Numbers cost 4, Aces 6, faces 7. Buy as many as you can afford.')));
+  mk.append(h('h3', {}, 'Market', h('span', { class: 'hint' }, 'Numbers cost 4, Aces 6, faces 7. Buy as many as you can afford. The leftmost card leaves at the start of the next turn.')));
   const row = h('div', { class: 'row', 'data-empty': 'The market is empty.' }); if (!G.row.length) row.classList.add('empty');
   G.row.forEach((c, i) => { const ok = me && canBuy(G, i); row.append(cardEl(c, { showCost: true, classes: ok ? 'affordable' : (me ? 'dim' : ''), onclick: ok ? () => act(() => buy(G, i)) : null })); });
   mk.append(row);
@@ -135,7 +134,7 @@ function showRules() {
       <tr><td class="red">♥ J, Q, K</td><td>7</td><td>Nothing. Worth 6 points at the end.</td></tr>
       <tr><td>A (any suit)</td><td>6</td><td>+1 card, +2 coins</td></tr>
     </table>
-    <p><b>Turn:</b> play your whole hand, buy any number of cards from the 5-card market, discard everything, draw 5. If you bought nothing you may clear the market and deal 5 new cards.</p>
+    <p><b>Turn:</b> the oldest market card slides off into the trash and a new one is dealt. Then play your whole hand, buy any number of cards from the 5-card market, discard everything, draw 5.</p>
     <p><b>End:</b> after the round in which the last face heart is bought, the market runs out, or round 12. Most points wins; ties go to the smaller deck.</p>` }),
     h('div', { class: 'actions' }, h('button', { class: 'primary', onclick: () => { modalRoot.replaceChildren(); if (G) render(); } }, 'Close')));
   modalRoot.replaceChildren(h('div', { class: 'overlay' }, m));
