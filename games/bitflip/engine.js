@@ -174,10 +174,24 @@ function afterGoalChange(G, w, i, before) {
   const after = goalColor(G, w, i);
   if (after === before) return;
   G.stats.flips++; log(G, `Goal ${w}.${i + 1} flips to ${after}.`);
+  // overwrite: false | 'bag' (erased blocks return to the bag) | 'capture' (flipper takes up to captureCap into hand)
+  //            | 'spin' (erased blocks become the flipper's votes) | 'resist' (erased blocks vote for the old colour)
   if (G.opts.overwrite && after !== 'X') {
+    const erased = [];
     for (const q of G.players) {
-      if (q.board[w][i] !== null && !rowFull(q, w) && q.board[w][i] !== after) { toBag(G, q.board[w][i]); q.board[w][i] = null; G.stats.erased++; log(G, `${q.name}'s block in ${w}.${i + 1} is overwritten.`); }
+      if (q === cur(G) && G.opts.overwrite !== 'bag' && G.opts.overwrite !== true) { /* the flipper's own RAM is erased too, but goes to the bag */ }
+      if (q.board[w][i] !== null && !rowFull(q, w) && q.board[w][i] !== after) { erased.push({ q, c: q.board[w][i] }); q.board[w][i] = null; G.stats.erased++; log(G, `${q.name}'s block in ${w}.${i + 1} is overwritten.`); }
     }
+    const mode = G.opts.overwrite === true ? 'bag' : G.opts.overwrite;
+    const cap = G.opts.captureCap ?? 1;
+    let taken = 0;
+    for (const e of erased) {
+      if (mode === 'capture' && e.q !== cur(G) && taken < cap) { G.hand.push(e.c); taken++; }
+      else if (mode === 'spin' && e.q !== cur(G)) { G.pendingVotes.push(e.c); }
+      else if (mode === 'resist') { G.goals[w][i].votes[e.c]++; G.stats.votesPlaced++; }
+      else toBag(G, e.c);
+    }
+    if (mode === 'resist') { const again = goalColor(G, w, i); if (again !== after) { G.stats.flips++; log(G, `Goal ${w}.${i + 1} resists and flips back to ${again}.`); } }
   }
   checkBets(G);
 }
