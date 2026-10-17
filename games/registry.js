@@ -53,4 +53,17 @@ export const GAMES = [
     length: '15-25 min',
     status: 'playable',
   },
+  {
+    slug: 'bitflip',
+    title: 'Bit Flip',
+    tagline: 'Commit blocks to memory, or vote on what the world will ask for.',
+    description:
+      'A bag of white and black blocks, registers of 2, 3 and 4 bits, and goal cards the table ' +
+      'votes on. Lock in a pattern and vote it true; flip a goal and overwrite everyone else\'s ' +
+      'unfinished memory. 2-5 players, hot-seat or bots, balanced by simulation.',
+    tags: ['2-5 players', 'original', 'printable rules', 'hot-seat', 'bots'],
+    players: '2-5',
+    length: '20 min',
+    status: 'playable',
+  },
 ];

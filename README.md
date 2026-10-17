@@ -63,6 +63,16 @@ The classic two-player competitive patience (Cat and Mouse), to the common two-d
 Against a bot or hot-seat. `node games/spite/sim.mjs` checks that bot games terminate and that
 the starting player has no edge.
 
+### Bit Flip
+
+An original design workshopped in this repo: a bag of white and black blocks, registers of 2, 3
+and 4 bits per player, public goal cards that are voted on with blocks, instant scoring with goal
+refresh, a finite goal deck as the clock, secret patterns, jackpot votes and interference (a flip
+erases old-colour blocks in unfinished rows; the flipper keeps one). 2-5 players.
+`rules.html` is the physical rules sheet. `node games/bitflip/sim.mjs 1000 4 [key=value ...]`
+reports strategy and seat win rates and game length; options include `overwrite`, `columns`,
+`p4`, `goalDeck`, `flipLead` and `endMode`.
+
 ## Local development
 
 Any static server works:

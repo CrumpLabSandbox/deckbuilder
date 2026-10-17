@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bit Flip rules</title>
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; max-width: 760px; margin: 0 auto; padding: 24px 20px 48px; color: #111; background: #fff; line-height: 1.4; }
+    h1 { margin: 0 0 2px; font-size: 2rem; } .sub { color: #555; margin: 0 0 18px; font-style: italic; }
+    h2 { font-size: 1.1rem; margin: 18px 0 6px; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; } th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #ddd; vertical-align: top; } th { background: #f3f0e8; }
+    ol, ul { margin: 4px 0 4px 20px; padding: 0; } li { margin: 3px 0; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+    .nav { font-family: system-ui, sans-serif; font-size: 0.85rem; margin-bottom: 12px; }
+    @media print { .nav { display: none; } body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="nav"><a href="./">← Play Bit Flip in the browser</a> · <a href="../../">The Deckhouse</a> · <a href="#" onclick="window.print();return false;">Print</a></div>
+  <h1>Bit Flip</h1>
+  <p class="sub">A game of memory and interference for 2–5 players. About 20 minutes.</p>
+
+  <h2>Components</h2>
+  <ul>
+    <li>A bag of small blocks: 32 white and 32 black (40 each with five players).</li>
+    <li>A deck of double-sided goal cards, white on one face and black on the other: 48 (56 with five players).</li>
+    <li>One memory board per player: three rows of 2, 3 and 4 slots (the registers).</li>
+    <li>A deck of secret pattern cards: every pattern of 2, 3 and 4 bits (28 cards).</li>
+    <li>A deck of 20 action cards (24 with five players): 5 each of Bit Flip, Rehearsal, Priming, Recount.</li>
+    <li>A score track or paper.</li>
+  </ul>
+
+  <h2>The idea</h2>
+  <p>The goal cards in the middle are what the world asks for: a 2-bit pattern, a 3-bit pattern and a 4-bit pattern. You draw blocks from the bag and either commit them to your memory board or spend them as votes that change the goals. <b>Fill a register so it matches its goal, left to right, and you score it.</b> Wider registers are worth more, take longer, and give the table more time to vote the goal out from under you.</p>
+
+  <h2>Setup</h2>
+  <ol>
+    <li>Shuffle the goal deck. Deal cards face down into three rows of 2, 3 and 4, then turn each over to whichever face comes up. This is the goal layout.</li>
+    <li>Everyone takes a memory board and one secret pattern card, kept hidden.</li>
+    <li>Shuffle the action deck. Choose a first player. In a two-player game the second player draws three blocks on their first turn instead of two.</li>
+  </ol>
+
+  <h2>Your turn</h2>
+  <ol>
+    <li><b>Draw two blocks</b> from the bag without looking.</li>
+    <li><b>Place every block you drew.</b> A block goes either into an empty slot on your board, or onto any goal card as a vote. You may also pick up blocks from your <i>unfinished</i> rows and place them again, anywhere, as part of this.</li>
+    <li>Any row that is now full <b>locks</b>: its blocks can't be moved again.
+      <ul>
+        <li>If the locked row matches its goal, or matches your secret pattern, it <b>scores immediately</b>: 3 points for the 2-register, 6 for the 3, 10 for the 4. Return its blocks to the bag and redeal that goal from the deck; the votes on the old goal cards go back in the bag. If you used your secret, draw a new one.</li>
+        <li>If it doesn't match, it stays locked as a bet. It scores the moment the goal changes to match it, on anyone's turn.</li>
+      </ul>
+    </li>
+    <li><b>Jackpot:</b> when you score the 4-register, don't return its four blocks to the bag. Place as many of them as you like on goal cards as votes, right now; the rest go back in the bag.</li>
+    <li>Scoring the 3- or the 4-register also draws you an action card. Action cards can be played at any time on your turn.</li>
+  </ol>
+
+  <h2>Goal cards and votes</h2>
+  <p>A goal card shows the colour with more blocks on it. With no blocks, or a tie, it shows its printed face. So one block flips a fresh card, and it takes more to flip it back. Votes stay until that goal is scored and redealt.</p>
+
+  <h2>Interference</h2>
+  <p>When <b>your</b> vote flips a goal card, memory gets overwritten: every block of the old colour sitting in that position of an <i>unfinished</i> row, on anyone's board, is removed. Take one of the removed blocks into your hand and place it this turn; the rest go back in the bag. Blocks already showing the new colour are untouched, and locked rows are never affected.</p>
+
+  <h2>Action cards</h2>
+  <table>
+    <tr><th>Card</th><th>Effect</th></tr>
+    <tr><td>Bit Flip</td><td>Flip one block on any board, or turn over one goal card (its votes return to the bag).</td></tr>
+    <tr><td>Rehearsal</td><td>Draw three extra blocks and place them now.</td></tr>
+    <tr><td>Priming</td><td>Your next draw is four blocks; keep two, return two.</td></tr>
+    <tr><td>Recount</td><td>Return up to two blocks of one colour from one goal card to the bag.</td></tr>
+  </table>
+
+  <h2>End of the game</h2>
+  <p>When a scored goal can't be fully redealt because the deck is empty, the game is ending: <b>finish the round</b> so everyone has had the same number of turns. The cards of that goal are removed but its votes stay where they are and alone decide the pattern: each position is the colour with more votes, and a tied position is wild (matches either colour). Such a goal can still be scored by anyone during the final round, and is not redealt.</p>
+  <p><b>Highest score wins.</b> Ties go to the player who placed fewer votes during the game.</p>
+
+  <div class="two">
+    <div>
+      <h2>Tips</h2>
+      <ul>
+        <li>A block of the wrong colour isn't waste. It's a vote, or a bet that the goal will flip.</li>
+        <li>Lock a 4-row early and the whole table will try to flip its goal. Lock it late and someone may beat you to the jackpot.</li>
+        <li>Watch the bag. If the table hoards white, the draws go black.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Variants</h2>
+      <ul>
+        <li><b>Calm:</b> play without Interference.</li>
+        <li><b>Grid:</b> the left-aligned columns of your board (4, 3 and 2 slots) also count as registers of their width. A block in any full line is locked.</li>
+        <li><b>Short:</b> use 36 goal cards.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

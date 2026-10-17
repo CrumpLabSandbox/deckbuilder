@@ -7,17 +7,18 @@ export const DEFAULTS = {
   flipLead: 1,          // votes must lead by this much to override the printed face
   endMode: 'round',     // 'immediate' | 'round' (deck empty: finish the round; scored goals become ghosts)
   jackpotVotes: true,   // a scored 4-register's blocks become votes
-  overwrite: false,     // a goal flip erases blocks in that position of incomplete rows (back to the bag)
+  overwrite: 'capture', // interference: a flip erases old-colour blocks in that position of incomplete rows; flipper keeps captureCap
+  captureCap: 1,
   columns: false,       // columns of the triangle also score (experimental)
   drawPerTurn: 2,
   actionOnWidth: 3,     // scoring a register this wide or wider draws an action card
   maxRounds: 40,
 };
 export const COUNTS = {
-  2: { goalDeck: 32, bag: 24, actions: 16 },
-  3: { goalDeck: 36, bag: 28, actions: 18 },
-  4: { goalDeck: 40, bag: 32, actions: 20 },
-  5: { goalDeck: 48, bag: 40, actions: 24 },
+  2: { goalDeck: 36, bag: 24, actions: 16 },
+  3: { goalDeck: 42, bag: 28, actions: 18 },
+  4: { goalDeck: 48, bag: 32, actions: 20 },
+  5: { goalDeck: 56, bag: 40, actions: 24 },
 };
 export const ACTIONS = ['bitflip', 'rehearsal', 'priming', 'recount'];
 export const ACTION_INFO = {
@@ -122,9 +123,11 @@ function nextTurn(G) {
   G.turnCount++;
   const p = cur(G);
   G.hand = [];
-  const n = p.primed ? 4 : G.opts.drawPerTurn;
+  // In a two-player game the second player draws one extra block on their first turn.
+  const n = (p.primed ? 4 : G.opts.drawPerTurn) + (G.round === 1 && G.nPlayers === 2 && p.idx === 1 ? 1 : 0);
   for (let i = 0; i < n; i++) { const c = drawBlock(G); if (c) G.hand.push(c); }
   if (p.primed) { p.primed = false; G.mustReturn = Math.max(0, G.hand.length - 2); } else G.mustReturn = 0;
+  log(G, `${p.name} draws ${G.hand.map(c => c === 'W' ? 'white' : 'black').join(' and ') || 'nothing'}.`);
 }
 
 // ---- placement ----
@@ -167,6 +170,7 @@ function addVote(G, w, i, colour, p) {
   const before = goalColor(G, w, i);
   G.goals[w][i].votes[colour]++;
   G.stats.votesPlaced++; if (p) p.stats.votes++;
+  log(G, `${p ? p.name : 'Someone'} votes ${colour === 'W' ? 'white' : 'black'} on goal ${w}.${i + 1}.`);
   afterGoalChange(G, w, i, before);
 }
 // A goal position changed colour: count the flip, maybe erase unconsolidated memory, and check bets.
