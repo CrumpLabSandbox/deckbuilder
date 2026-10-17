@@ -1,22 +1,23 @@
 // Bit Flip: engine. Blocks are 'W' or 'B'. DOM-free, used by bots, sim and UI.
 import { makeRng } from '../../platform/rng.js';
 
-export const WIDTHS = [1, 2, 3, 4];
 export const DEFAULTS = {
+  widths: [2, 3, 4],
   points: { 1: 1, 2: 3, 3: 6, 4: 10 },
   flipLead: 1,          // votes must lead by this much to override the printed face
-  endMode: 'immediate', // 'immediate' | 'round'
+  endMode: 'round',     // 'immediate' | 'round' (deck empty: finish the round; scored goals become ghosts)
   jackpotVotes: true,   // a scored 4-register's blocks become votes
+  overwrite: false,     // a goal flip erases blocks in that position of incomplete rows (back to the bag)
   columns: false,       // columns of the triangle also score (experimental)
   drawPerTurn: 2,
   actionOnWidth: 3,     // scoring a register this wide or wider draws an action card
   maxRounds: 40,
 };
 export const COUNTS = {
-  2: { goalDeck: 40, bag: 24, actions: 16 },
-  3: { goalDeck: 45, bag: 28, actions: 18 },
-  4: { goalDeck: 50, bag: 32, actions: 20 },
-  5: { goalDeck: 60, bag: 40, actions: 24 },
+  2: { goalDeck: 32, bag: 24, actions: 16 },
+  3: { goalDeck: 36, bag: 28, actions: 18 },
+  4: { goalDeck: 40, bag: 32, actions: 20 },
+  5: { goalDeck: 48, bag: 40, actions: 24 },
 };
 export const ACTIONS = ['bitflip', 'rehearsal', 'priming', 'recount'];
 export const ACTION_INFO = {
@@ -39,11 +40,12 @@ export function newGame({ seed, players, options = {} }) {
     goalDeck: options.goalDeck || counts.goalDeck,
     goals: {}, players: [], turn: -1, round: 0, turnCount: 0, phase: 'setup', log: [], over: false, winner: null, endReason: null,
     hand: [], pendingVotes: [], actionDeck: [], actionDiscard: [], secretDeck: [],
-    stats: { flips: 0, scoresByWidth: { 1: 0, 2: 0, 3: 0, 4: 0 }, secretScores: 0, betScores: 0, votesPlaced: 0, firstJackpot: null, roundsAtEnd: 0 },
+    stats: { flips: 0, scoresByWidth: { 1: 0, 2: 0, 3: 0, 4: 0 }, secretScores: 0, betScores: 0, votesPlaced: 0, firstJackpot: null, roundsAtEnd: 0, erased: 0, ghostScores: 0 },
     finalRound: false,
   };
-  // Goal layout: deal 10 cards.
-  for (const w of WIDTHS) { G.goals[w] = []; for (let i = 0; i < w; i++) G.goals[w].push(dealGoalCard(G)); }
+  G.widths = G.opts.widths.slice();
+  // Goal layout.
+  for (const w of G.widths) { G.goals[w] = []; for (let i = 0; i < w; i++) G.goals[w].push(dealGoalCard(G)); }
   // Action deck.
   const per = Math.ceil(counts.actions / ACTIONS.length);
   for (const a of ACTIONS) for (let i = 0; i < per; i++) G.actionDeck.push(a);
@@ -54,7 +56,7 @@ export function newGame({ seed, players, options = {} }) {
   players.forEach((spec, idx) => {
     const p = { idx, name: spec.name || `Player ${idx + 1}`, kind: spec.kind || 'bot', strategy: spec.strategy || 'balanced', board: {}, score: 0, secret: null, actions: [], primed: false,
       stats: { scored: { 1: 0, 2: 0, 3: 0, 4: 0 }, votes: 0, secrets: 0, bets: 0, actionsPlayed: 0 } };
-    for (const w of WIDTHS) p.board[w] = Array(w).fill(null);
+    for (const w of G.widths) p.board[w] = Array(w).fill(null);
     p.secret = G.secretDeck.pop();
     G.players.push(p);
   });
@@ -70,29 +72,32 @@ function dealGoalCard(G) {
 }
 
 export const cur = (G) => G.players[G.turn];
+// 'W' | 'B' | 'X' (ghost goal with tied votes: wild, matches either colour)
 export function goalColor(G, w, i) {
   const g = G.goals[w][i];
   const d = g.votes.W - g.votes.B;
+  if (g.ghost) return d > 0 ? 'W' : d < 0 ? 'B' : 'X';
   if (d >= G.opts.flipLead) return 'W';
   if (-d >= G.opts.flipLead) return 'B';
   return g.face;
 }
+export const matches = (cell, goal) => goal === 'X' || cell === goal;
 export const goalPattern = (G, w) => G.goals[w].map((_, i) => goalColor(G, w, i));
 export const rowFull = (p, w) => p.board[w].every(x => x !== null);
 export const rowEmpty = (p, w) => p.board[w].every(x => x === null);
 export function rowMatches(G, p, w) {
   if (!rowFull(p, w)) return null;
   const row = p.board[w];
-  if (row.every((c, i) => c === goalColor(G, w, i))) return 'goal';
+  if (row.every((c, i) => matches(c, goalColor(G, w, i)))) return 'goal';
   if (p.secret && p.secret.width === w && row.every((c, i) => c === p.secret.pattern[i])) return 'secret';
   return null;
 }
 // Lines: rows always; columns of the left-aligned triangle when enabled. A line is a list of [w, i] cells.
 export function lines(G) {
-  const L = WIDTHS.map(w => ({ width: w, cells: Array.from({ length: w }, (_, i) => [w, i]), kind: 'row' }));
+  const L = G.widths.map(w => ({ width: w, cells: Array.from({ length: w }, (_, i) => [w, i]), kind: 'row' }));
   if (G.opts.columns) for (let col = 0; col < 4; col++) {
-    const cells = WIDTHS.filter(w => w > col).map(w => [w, col]);
-    L.push({ width: cells.length, cells, kind: 'col' });
+    const cells = G.widths.filter(w => w > col).map(w => [w, col]);
+    if (G.goals[cells.length]) L.push({ width: cells.length, cells, kind: 'col' });
   }
   return L;
 }
@@ -162,7 +167,19 @@ function addVote(G, w, i, colour, p) {
   const before = goalColor(G, w, i);
   G.goals[w][i].votes[colour]++;
   G.stats.votesPlaced++; if (p) p.stats.votes++;
-  if (goalColor(G, w, i) !== before) { G.stats.flips++; log(G, `Goal ${w}.${i + 1} flips to ${goalColor(G, w, i)}.`); checkBets(G); }
+  afterGoalChange(G, w, i, before);
+}
+// A goal position changed colour: count the flip, maybe erase unconsolidated memory, and check bets.
+function afterGoalChange(G, w, i, before) {
+  const after = goalColor(G, w, i);
+  if (after === before) return;
+  G.stats.flips++; log(G, `Goal ${w}.${i + 1} flips to ${after}.`);
+  if (G.opts.overwrite && after !== 'X') {
+    for (const q of G.players) {
+      if (q.board[w][i] !== null && !rowFull(q, w) && q.board[w][i] !== after) { toBag(G, q.board[w][i]); q.board[w][i] = null; G.stats.erased++; log(G, `${q.name}'s block in ${w}.${i + 1} is overwritten.`); }
+    }
+  }
+  checkBets(G);
 }
 
 // After any board change: score full matching rows for the player; for other players, bets may have come true.
@@ -180,7 +197,7 @@ function scoreLineIfMatching(G, p, L, isBet = false) {
   const w = L.width;
   const goal = goalPattern(G, w);
   let how = null;
-  if (cells.every((c, i) => c === goal[i])) how = 'goal';
+  if (cells.every((c, i) => matches(c, goal[i]))) how = 'goal';
   else if (p.secret && p.secret.width === w && cells.every((c, i) => c === p.secret.pattern[i])) how = 'secret';
   if (!how) { if (L.kind === 'row' && !isBet && G.round) p.stats.bets++; return; }
   const pts = G.opts.points[w];
@@ -188,6 +205,7 @@ function scoreLineIfMatching(G, p, L, isBet = false) {
   p.stats.scored[w]++; G.stats.scoresByWidth[w]++;
   if (how === 'secret') { p.stats.secrets++; G.stats.secretScores++; }
   if (isBet) G.stats.betScores++;
+  if (G.goals[w][0].ghost) G.stats.ghostScores++;
   if (w === 4 && G.stats.firstJackpot === null) G.stats.firstJackpot = p.idx;
   log(G, `${p.name} scores a ${w}-register (${how}) for ${pts}.`);
   // Clear the line. Jackpot blocks become pending votes for the scoring player (only on their own turn).
@@ -196,20 +214,23 @@ function scoreLineIfMatching(G, p, L, isBet = false) {
   if (w === 4 && G.opts.jackpotVotes && p === cur(G)) G.pendingVotes.push(...blocks); else for (const c of blocks) toBag(G, c);
   if (how === 'secret') { p.secret = G.secretDeck.length ? G.secretDeck.pop() : null; }
   if (w >= G.opts.actionOnWidth && G.actionDeck.length) p.actions.push(G.actionDeck.pop());
-  // The world moves on: votes on the old goal return to the bag and the goal is redealt.
-  for (const g of G.goals[w]) { G.bag.W += g.votes.W; G.bag.B += g.votes.B; g.votes = { W: 0, B: 0 }; }
+  // The world moves on: the goal is redealt and the old votes return to the bag.
+  // If the deck is empty the cards are cleared but the votes stay and define the goal (a ghost).
   refreshGoal(G, w);
 }
 function refreshGoal(G, w) {
-  const fresh = [];
-  for (let i = 0; i < w; i++) { const c = dealGoalCard(G); if (c) fresh.push(c); }
-  if (fresh.length < w) {
-    G.goals[w] = G.goals[w]; // leave as is
+  if (G.goals[w][0].ghost) return; // already a ghost; votes stay
+  if (G.goalDeck < w) {
+    // Cannot refill: cards are cleared, the votes stay. Any cards dealt would be wasted, so none are.
     G.goalDeck = 0;
-    if (G.opts.endMode === 'round') { if (!G.finalRound) { G.finalRound = true; log(G, 'The goal deck is empty. This round is the last.'); } }
+    for (const g of G.goals[w]) { g.ghost = true; g.face = null; }
+    if (G.opts.endMode === 'round') { if (!G.finalRound) { G.finalRound = true; log(G, 'The goal deck is empty. Everyone finishes the round.'); } }
     else endGame(G, 'The goal deck could not refill a scored goal.');
     return;
   }
+  for (const g of G.goals[w]) { G.bag.W += g.votes.W; G.bag.B += g.votes.B; }
+  const fresh = [];
+  for (let i = 0; i < w; i++) fresh.push(dealGoalCard(G));
   G.goals[w] = fresh;
 }
 
@@ -228,9 +249,9 @@ export function playAction(G, type, params = {}) {
   p.actions.splice(k, 1); p.stats.actionsPlayed++; G.actionDiscard.push(type);
   if (type === 'rehearsal') { for (let i = 0; i < 3; i++) { const c = drawBlock(G); if (c) G.hand.push(c); } }
   else if (type === 'priming') { p.primed = true; }
-  else if (type === 'recount') { const g = G.goals[params.w][params.i]; const n = Math.min(2, g.votes[params.colour]); g.votes[params.colour] -= n; G.bag[params.colour] += n; checkBets(G); }
+  else if (type === 'recount') { const g = G.goals[params.w][params.i]; const before = goalColor(G, params.w, params.i); const n = Math.min(2, g.votes[params.colour]); g.votes[params.colour] -= n; G.bag[params.colour] += n; afterGoalChange(G, params.w, params.i, before); }
   else if (type === 'bitflip') {
-    if (params.target === 'goal') { const g = G.goals[params.w][params.i]; G.bag.W += g.votes.W; G.bag.B += g.votes.B; g.votes = { W: 0, B: 0 }; g.face = other(g.face); G.stats.flips++; checkBets(G); }
+    if (params.target === 'goal') { const g = G.goals[params.w][params.i]; const before = goalColor(G, params.w, params.i); if (g.ghost) { const d = g.votes.W - g.votes.B; const c = d >= 0 ? 'B' : 'W'; g.votes[c] += Math.abs(d) + 1; } else { G.bag.W += g.votes.W; G.bag.B += g.votes.B; g.votes = { W: 0, B: 0 }; g.face = other(g.face); } afterGoalChange(G, params.w, params.i, before); }
     else { const q = G.players[params.player]; const c = q.board[params.w][params.i]; if (c === null) return true; q.board[params.w][params.i] = other(c); afterPlacement(G, q); }
   }
   log(G, `${p.name} plays ${ACTION_INFO[type].name}.`);

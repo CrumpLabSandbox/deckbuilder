@@ -24,13 +24,13 @@ export function playGame(seed, specs, opts) {
 
 const pick = makeRng('bitflip-' + NP + JSON.stringify(options));
 const byStrat = {}, bySeat = {};
-let rounds = 0, turns = 0, flips = 0, votes = 0, jackpotWins = 0, jackpots = 0, secrets = 0, bets = 0, scores = 0, maxScore = 0, bagEmpty = 0, most4Wins = 0, winnerFrom4 = 0, winnerPts = 0, margin = 0;
+let erased = 0, ghosts = 0, rounds = 0, turns = 0, flips = 0, votes = 0, jackpotWins = 0, jackpots = 0, secrets = 0, bets = 0, scores = 0, maxScore = 0, bagEmpty = 0, most4Wins = 0, winnerFrom4 = 0, winnerPts = 0, margin = 0;
 const byWidth = { 1: 0, 2: 0, 3: 0, 4: 0 }, ends = {};
 const tally = (m, k, win, s) => { const e = m[k] || (m[k] = { n: 0, w: 0, s: 0 }); e.n++; e.w += win; e.s += s; };
 for (let g = 0; g < N; g++) {
   const specs = Array.from({ length: NP }, (_, i) => ({ name: 'P' + i, strategy: pick.pick(STRATEGIES) }));
   const G = playGame(`bf-${g}`, specs, options);
-  rounds += G.round; turns += G.turnCount; flips += G.stats.flips; votes += G.stats.votesPlaced; secrets += G.stats.secretScores; bets += G.stats.betScores;
+  rounds += G.round; turns += G.turnCount; erased += G.stats.erased; ghosts += G.stats.ghostScores; flips += G.stats.flips; votes += G.stats.votesPlaced; secrets += G.stats.secretScores; bets += G.stats.betScores;
   ends[G.endReason] = (ends[G.endReason] || 0) + 1;
   for (const w of [1, 2, 3, 4]) byWidth[w] += G.stats.scoresByWidth[w];
   if (G.stats.firstJackpot !== null) { jackpots++; if (G.winner === G.stats.firstJackpot) jackpotWins++; }
@@ -41,6 +41,7 @@ for (let g = 0; g < N; g++) {
 console.log(`Bit Flip: ${N} games, ${NP} players, options ${JSON.stringify(options)}`);
 console.log(`  length: ${(rounds / N).toFixed(1)} rounds, ${(turns / N).toFixed(0)} turns · mean score ${(scores / N / NP).toFixed(1)} (max ${maxScore})`);
 console.log(`  ends: ${Object.entries(ends).map(([k, v]) => `${(100 * v / N).toFixed(0)}% ${k}`).join(' | ')}`);
+console.log(`  erased blocks/game ${(erased / N).toFixed(1)} · ghost-goal scores/game ${(ghosts / N).toFixed(2)}`);
 console.log(`  flips/game ${(flips / N).toFixed(1)} · votes/game ${(votes / N).toFixed(1)} · scores by width 1:${(byWidth[1] / N).toFixed(1)} 2:${(byWidth[2] / N).toFixed(1)} 3:${(byWidth[3] / N).toFixed(1)} 4:${(byWidth[4] / N).toFixed(1)} · secret scores/game ${(secrets / N).toFixed(2)} · bet payoffs/game ${(bets / N).toFixed(2)} · bag empty at end ${(100 * bagEmpty / N).toFixed(0)}%`);
 console.log(`  winner had (joint) most 4-registers in ${(100 * most4Wins / N).toFixed(0)}% of games · ${(100 * winnerFrom4 / winnerPts).toFixed(0)}% of winner's points came from 4-registers · mean winning margin ${(margin / N).toFixed(1)}`);
 console.log(`  first 4-register scorer wins ${(100 * jackpotWins / Math.max(1, jackpots)).toFixed(0)}% (fair ${(100 / NP).toFixed(0)}%) in ${(100 * jackpots / N).toFixed(0)}% of games with a jackpot`);

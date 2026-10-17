@@ -1,4 +1,4 @@
-import { cur, goalColor, goalPattern, rowFull, placeFromHand, voteFromHand, returnFromHand, pickUp, placePendingVote, returnPendingVotes, playAction, endTurn, WIDTHS } from './engine.js';
+import { cur, goalColor, goalPattern, rowFull, matches, placeFromHand, voteFromHand, returnFromHand, pickUp, placePendingVote, returnPendingVotes, playAction, endTurn } from './engine.js';
 
 export const STRATEGIES = ['grinder', 'builder', 'balanced', 'politician', 'gambler'];
 const other = (c) => (c === 'W' ? 'B' : 'W');
@@ -11,6 +11,8 @@ function targetFor(G, p, w) {
   if (p.secret && p.secret.width === w) opts.push({ how: 'secret', pat: p.secret.pattern });
   const row = p.board[w];
   for (const o of opts) {
+    // A wild ('X') position is satisfied by whatever we have or draw; treat it as needing any colour we hold.
+    o.pat = o.pat.map((c, i) => c === 'X' ? (row[i] || (G.hand[0] || 'W')) : c);
     o.need = o.pat.map((c, i) => row[i] === c ? null : c).filter(Boolean);
     o.wrong = o.pat.filter((c, i) => row[i] !== null && row[i] !== c).length;
     // Can the hand (plus wrongly placed blocks) cover the need?
@@ -36,7 +38,7 @@ function rowPriority(G, p, w, t, strategy) {
 // One row placement: pick the best (row, slot, colour) for a block in hand. Returns true if placed.
 function placeOne(G, p, strategy) {
   let best = null, bestV = -Infinity;
-  for (const w of WIDTHS) {
+  for (const w of G.widths) {
     if (rowFull(p, w)) continue;
     const t = targetFor(G, p, w);
     const v = rowPriority(G, p, w, t, strategy);
@@ -56,30 +58,36 @@ function placeOne(G, p, strategy) {
   return placeFromHand(G, best.w, best.i, best.c);
 }
 
-// Attack target: a position where an opponent is close on a wide row and we are not aligned with them.
+// Attack target: a goal position where opponents have matching blocks in rows that are close to scoring and we are not
+// aligned with them. With overwrite on, a flip erases every such block, so multi-hit positions are worth more.
 function attackTarget(G, p, colourAvail) {
   let best = null, bestV = 0;
-  for (const q of G.players) {
-    if (q === p) continue;
-    for (const w of [4, 3, 2]) {
-      const goal = goalPattern(G, w);
-      const row = q.board[w];
-      const matched = row.filter((c, i) => c === goal[i]).length;
-      if (matched < w - 1 || rowFull(q, w)) continue; // close to scoring (one away), or already full (then it is a bet, ignore)
-      for (let i = 0; i < w; i++) {
+  const ow = G.opts.overwrite;
+  for (const w of G.widths.slice().reverse()) {
+    const goal = goalPattern(G, w);
+    for (let i = 0; i < w; i++) {
+      if (goal[i] === 'X') continue;
+      const flipTo = other(goal[i]);
+      if (!colourAvail(flipTo)) continue;
+      if (p.board[w][i] === goal[i] && !rowFull(p, w)) continue; // would hurt us too
+      let v = 0;
+      for (const q of G.players) {
+        if (q === p || rowFull(q, w)) continue;
+        const row = q.board[w];
         if (row[i] !== goal[i]) continue;
-        const flipTo = other(goal[i]);
-        if (!colourAvail(flipTo)) continue;
-        // Do not break our own alignment on that position.
-        if (p.board[w][i] === goal[i]) continue;
-        const g = G.goals[w][i];
-        const needVotes = Math.max(1, (g.votes[goal[i]] - g.votes[flipTo]) + G.opts.flipLead);
-        const v = G.opts.points[w] * (matched / w) / needVotes;
-        if (v > bestV) { bestV = v; best = { w, i, c: flipTo, needVotes }; }
+        const matched = row.filter((c, k) => matches(c, goal[k])).length;
+        // Threat: how close they are; value of a hit: tempo (and a lost block when overwriting).
+        const closeness = matched / w;
+        v += G.opts.points[w] * closeness * (ow ? 0.5 : 0.25) * (matched >= w - 1 ? 2 : 1);
       }
+      if (!v) continue;
+      const g = G.goals[w][i];
+      const needVotes = Math.max(1, (g.votes[goal[i]] - g.votes[flipTo]) + G.opts.flipLead);
+      v /= needVotes;
+      if (v > bestV) { bestV = v; best = { w, i, c: flipTo, needVotes }; }
     }
   }
-  return bestV >= 1.5 ? best : null;
+  return bestV >= 1.0 ? best : null;
 }
 
 // Bet target: a full non-matching row of ours; vote on a position where the goal differs from our block.
@@ -87,7 +95,7 @@ function betTarget(G, p, colourAvail) {
   for (const w of [4, 3, 2]) {
     if (!rowFull(p, w)) continue;
     const goal = goalPattern(G, w);
-    for (let i = 0; i < w; i++) if (p.board[w][i] !== goal[i] && colourAvail(p.board[w][i])) return { w, i, c: p.board[w][i] };
+    for (let i = 0; i < w; i++) if (!matches(p.board[w][i], goal[i]) && colourAvail(p.board[w][i])) return { w, i, c: p.board[w][i] };
   }
   return null;
 }
@@ -95,7 +103,7 @@ function betTarget(G, p, colourAvail) {
 function dumpSlot(G, p, c) {
   // Place a block where it does least harm: an empty slot in the lowest-value row, preferring slots whose target already is c.
   let best = null, bestV = -Infinity;
-  for (const w of WIDTHS) {
+  for (const w of G.widths) {
     if (rowFull(p, w)) continue;
     const t = targetFor(G, p, w);
     for (let i = 0; i < w; i++) {
@@ -117,7 +125,7 @@ function useActions(G, p) {
     for (const w of [4, 3, 2]) {
       if (!rowFull(p, w)) continue;
       const goal = goalPattern(G, w);
-      const diff = goal.map((c, i) => c !== p.board[w][i] ? i : -1).filter(i => i >= 0);
+      const diff = goal.map((c, i) => !matches(p.board[w][i], c) ? i : -1).filter(i => i >= 0);
       if (diff.length === 1) { playAction(G, 'bitflip', { target: 'goal', w, i: diff[0] }); done = true; break; }
     }
     if (!done) {
@@ -132,7 +140,7 @@ function useActions(G, p) {
       for (let i = 0; i < w; i++) {
         const mine = p.board[w][i]; if (mine === null) continue;
         const g = G.goals[w][i];
-        if (goalColor(G, w, i) !== mine && g.votes[other(mine)] > 0 && g.face === mine) { playAction(G, 'recount', { w, i, colour: other(mine) }); return; }
+        if (!g.ghost && goalColor(G, w, i) !== mine && g.votes[other(mine)] > 0 && g.face === mine) { playAction(G, 'recount', { w, i, colour: other(mine) }); return; }
       }
     }
   }
@@ -144,8 +152,8 @@ export function botTurn(G) {
   useActions(G, p);
   // Priming return: give back the colour we need least.
   while (G.mustReturn > 0) {
-    const needW = WIDTHS.reduce((n, w) => n + (rowFull(p, w) ? 0 : count(targetFor(G, p, w).need, 'W')), 0);
-    const needB = WIDTHS.reduce((n, w) => n + (rowFull(p, w) ? 0 : count(targetFor(G, p, w).need, 'B')), 0);
+    const needW = G.widths.reduce((n, w) => n + (rowFull(p, w) ? 0 : count(targetFor(G, p, w).need, 'W')), 0);
+    const needB = G.widths.reduce((n, w) => n + (rowFull(p, w) ? 0 : count(targetFor(G, p, w).need, 'B')), 0);
     const give = (count(G.hand, 'W') - needW) >= (count(G.hand, 'B') - needB) ? 'W' : 'B';
     if (!returnFromHand(G, G.hand.includes(give) ? give : G.hand[0])) break;
   }
@@ -172,7 +180,7 @@ export function botTurn(G) {
     // Board full of bets: vote where it helps the most or anywhere.
     const b2 = betTarget(G, p, () => true);
     if (b2) { voteFromHand(G, b2.w, b2.i, c); continue; }
-    voteFromHand(G, 1, 0, c);
+    voteFromHand(G, G.widths[0], 0, c);
   }
   // Jackpot votes.
   let guard2 = 0;
