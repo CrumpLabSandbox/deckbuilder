@@ -73,6 +73,13 @@ erases old-colour blocks in unfinished rows; the flipper keeps one). 2-5 players
 reports strategy and seat win rates and game length; options include `overwrite`, `columns`,
 `p4`, `goalDeck`, `flipLead` and `endMode`.
 
+### Euchre
+
+Standard four-player Euchre (24-card deck, bowers, order up and name trump, going alone, stick the
+dealer optional, game to 10). You play South with a bot partner against two bots. The coach
+(`bots.js`) is the same logic the bots use, so every suggestion comes with its reason. `rules.html`
+is a printable cheat sheet. `node games/euchre/sim.mjs 2000` reports bidding and scoring rates.
+
 ## Local development
 
 Any static server works:

@@ -29,6 +29,7 @@ jobs:
           node games/pips/sim.mjs --quick
           node games/spite/sim.mjs --quick
           node games/bitflip/sim.mjs --quick
+          node games/euchre/sim.mjs --quick
       - uses: actions/configure-pages@v5
         with:
           enablement: true

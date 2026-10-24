@@ -66,4 +66,17 @@ export const GAMES = [
     length: '20 min',
     status: 'playable',
   },
+  {
+    slug: 'euchre',
+    title: 'Euchre',
+    tagline: 'The classic partnership trick-taker, with a coach at your elbow.',
+    description:
+      'You and your partner against two bots, standard rules: bowers, ordering up, going alone, ' +
+      'stick the dealer, game to 10. A coach suggests every bid and play and says why, and there ' +
+      'is a printable cheat sheet for the real table.',
+    tags: ['4 players', 'classic', 'coach', 'bots', 'cheat sheet'],
+    players: '1 + 3 bots',
+    length: '15-25 min',
+    status: 'playable',
+  },
 ];

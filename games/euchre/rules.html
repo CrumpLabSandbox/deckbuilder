@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Euchre cheat sheet</title>
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; max-width: 760px; margin: 0 auto; padding: 24px 20px 48px; color: #111; background: #fff; line-height: 1.4; }
+    h1 { margin: 0 0 2px; font-size: 2rem; } .sub { color: #555; margin: 0 0 16px; font-style: italic; }
+    h2 { font-size: 1.1rem; margin: 16px 0 6px; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; } th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #ddd; vertical-align: top; } th { background: #f3f0e8; }
+    ol, ul { margin: 4px 0 4px 20px; padding: 0; } li { margin: 3px 0; }
+    .red { color: #b3262e; }
+    .ladder { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+    .ladder span { border: 1px solid #bbb; border-radius: 6px; padding: 6px 8px; min-width: 44px; text-align: center; font-weight: bold; background: #faf8f2; }
+    .ladder small { display: block; font-weight: normal; font-size: 0.7rem; color: #555; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+    .nav { font-family: system-ui, sans-serif; font-size: 0.85rem; margin-bottom: 12px; }
+    @media print { .nav { display: none; } body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="nav"><a href="./">← Play Euchre in the browser</a> · <a href="../../">The Deckhouse</a> · <a href="#" onclick="window.print();return false;">Print</a></div>
+  <h1>Euchre</h1>
+  <p class="sub">Cheat sheet. Four players, two partnerships sitting opposite. First team to 10 wins.</p>
+
+  <h2>Deck and deal</h2>
+  <p>24 cards: 9, 10, J, Q, K, A of each suit. Deal 5 to each player (groups of 2 and 3 is traditional). Turn the top of the remaining four face up. The deal passes to the left each hand.</p>
+
+  <h2>Trump order (example: hearts are trump)</h2>
+  <div class="ladder">
+    <span class="red">J♥<small>right bower</small></span>
+    <span class="red">J♦<small>left bower</small></span>
+    <span class="red">A♥</span><span class="red">K♥</span><span class="red">Q♥</span><span class="red">10♥</span><span class="red">9♥</span>
+  </div>
+  <p>The <b>right bower</b> is the jack of trump. The <b>left bower</b> is the other jack of the same colour, and for this hand it <b>is a trump</b>, not a card of its printed suit. Every trump beats every non-trump. In the other suits the order is A, K, Q, J, 10, 9 (the left bower's suit is missing its jack).</p>
+  <table>
+    <tr><th>Trump</th><th>Right bower</th><th>Left bower</th></tr>
+    <tr><td>♠ Spades</td><td>J♠</td><td>J♣</td></tr>
+    <tr><td>♣ Clubs</td><td>J♣</td><td>J♠</td></tr>
+    <tr><td class="red">♥ Hearts</td><td class="red">J♥</td><td class="red">J♦</td></tr>
+    <tr><td class="red">♦ Diamonds</td><td class="red">J♦</td><td class="red">J♥</td></tr>
+  </table>
+
+  <h2>Bidding</h2>
+  <ol>
+    <li><b>Round 1:</b> starting left of the dealer, each player says <b>"order it up"</b> (the turned card's suit becomes trump) or <b>"pass"</b>. The dealer says "pick it up" or passes. If trump is made, the dealer takes the turned card into hand and discards one face down.</li>
+    <li><b>Round 2:</b> if everyone passed, turn the card down. Starting left of the dealer, each player may <b>name another suit</b> or pass.</li>
+    <li>If everyone passes again, either the dealer must name a suit (<b>stick the dealer</b>) or the cards are thrown in and the next player deals. Agree which before you start.</li>
+  </ol>
+  <p>The team that chose trump are the <b>makers</b>; the other team are the <b>defenders</b>. Whoever chooses trump may say <b>"alone"</b>: their partner lays down their cards and sits out.</p>
+
+  <h2>Play</h2>
+  <ul>
+    <li>The player left of the dealer leads (skip a player who is sitting out). The winner of each trick leads the next.</li>
+    <li><b>Follow suit if you can.</b> The left bower is trump: if trump is led and it's your only trump, you must play it; if its printed suit is led, it does <i>not</i> count.</li>
+    <li>If you can't follow, play any card. Trumping in is allowed but never required.</li>
+    <li>Highest trump wins; with no trump, the highest card of the suit led wins.</li>
+  </ul>
+
+  <h2>Scoring</h2>
+  <table>
+    <tr><th>Result</th><th>Points</th></tr>
+    <tr><td>Makers take 3 or 4 tricks</td><td>1 to makers</td></tr>
+    <tr><td>Makers take all 5 (march)</td><td>2 to makers</td></tr>
+    <tr><td>Lone maker takes all 5</td><td>4 to makers</td></tr>
+    <tr><td>Lone maker takes 3 or 4</td><td>1 to makers</td></tr>
+    <tr><td>Makers take 0–2 (euchred)</td><td>2 to defenders</td></tr>
+  </table>
+  <p>Traditionally each team keeps score with a 6 and a 4 from the unused cards, uncovering pips as points are scored.</p>
+
+  <div class="two">
+    <div>
+      <h2>Bidding rules of thumb</h2>
+      <ul>
+        <li>Three trump, or two strong trump plus an off-suit ace, is usually enough.</li>
+        <li>Count the bowers as your best cards; a hand with both bowers is strong.</li>
+        <li>Ordering up an opponent dealer hands them a trump. Your partner as dealer gets it instead.</li>
+        <li>Go alone with both bowers (or right bower and ace) plus a third trump and at most one weak side card.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Playing rules of thumb</h2>
+      <ul>
+        <li>Makers: lead trump to pull the opponents' trump.</li>
+        <li>Defenders: lead off-suit aces, not trump.</li>
+        <li>If your partner is winning the trick, play low.</li>
+        <li>Win as cheaply as you can; save high cards.</li>
+        <li>Discard to make a suit void so you can trump it.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
