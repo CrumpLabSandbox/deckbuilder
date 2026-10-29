@@ -80,6 +80,13 @@ dealer optional, game to 10). You play South with a bot partner against two bots
 (`bots.js`) is the same logic the bots use, so every suggestion comes with its reason. `rules.html`
 is a printable cheat sheet. `node games/euchre/sim.mjs 2000` reports bidding and scoring rates.
 
+### Take 5
+
+The classic simultaneous-play card game (6 nimmt! by Wolfgang Kramer): 104 cards with bullhead
+penalties, four rows, the sixth card takes the row, game to 66 (or 33). 2-10 players, hot-seat or
+bots. Easy bots play at random; normal and hard estimate each card's penalty by sampling what the
+other players might play. `node games/take5/sim.mjs 400` compares the bot levels.
+
 ## Local development
 
 Any static server works:

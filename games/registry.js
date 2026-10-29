@@ -79,4 +79,17 @@ export const GAMES = [
     length: '15-25 min',
     status: 'playable',
   },
+  {
+    slug: 'take5',
+    title: 'Take 5',
+    tagline: 'Everyone plays at once; the sixth card takes the row.',
+    description:
+      'Based on 6 nimmt! 104 numbered cards, four rows, and simultaneous play. Lay the sixth card ' +
+      'in a row and you take the five before it. Fewest bullheads when someone hits 66 wins. ' +
+      '2-10 players against easy, normal or hard bots, or hot-seat.',
+    tags: ['2-10 players', 'classic', 'bots', 'hot-seat'],
+    players: '2-10',
+    length: '15-25 min',
+    status: 'playable',
+  },
 ];
