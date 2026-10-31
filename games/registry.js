@@ -92,4 +92,17 @@ export const GAMES = [
     length: '15-25 min',
     status: 'playable',
   },
+  {
+    slug: 'fox',
+    title: 'Fox in the Forest',
+    tagline: 'A two-player trick-taker where winning too much loses.',
+    description:
+      'Based on The Fox in the Forest by Joshua Buergel. Three suits, a decree card for trump, and ' +
+      'odd cards with powers: Swan, Fox, Woodcutter, Treasure, Witch, Monarch. Humble or Victorious ' +
+      'both score; Greedy scores nothing. Against an easy, normal or hard bot, or hot-seat.',
+    tags: ['2 players', 'trick-taking', 'bots', 'hot-seat', 'cheat sheet'],
+    players: '2',
+    length: '20-30 min',
+    status: 'playable',
+  },
 ];

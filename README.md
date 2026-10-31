@@ -87,6 +87,14 @@ penalties, four rows, the sixth card takes the row, game to 66 (or 33). 2-10 pla
 bots. Easy bots play at random; normal and hard estimate each card's penalty by sampling what the
 other players might play. `node games/take5/sim.mjs 400` compares the bot levels.
 
+### Fox in the Forest
+
+The two-player trick-taking game by Joshua Buergel: 33 cards in three suits, a decree card for
+trump, powers on the odd cards, and scoring bands that reward 0-3 or 7-9 tricks and punish greed.
+Play against an easy, normal or hard bot (hard samples the hidden cards and plays out the round for
+each option), or hot-seat. `rules.html` is a printable cheat sheet. `node games/fox/sim.mjs 200`
+compares the bot levels.
+
 ## Local development
 
 Any static server works:

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fox in the Forest cheat sheet</title>
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; max-width: 760px; margin: 0 auto; padding: 24px 20px 48px; color: #111; background: #fff; line-height: 1.4; }
+    h1 { margin: 0 0 2px; font-size: 2rem; } .sub { color: #555; margin: 0 0 16px; font-style: italic; }
+    h2 { font-size: 1.1rem; margin: 16px 0 6px; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; } th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #ddd; vertical-align: top; } th { background: #f3f0e8; }
+    ol, ul { margin: 4px 0 4px 20px; padding: 0; } li { margin: 3px 0; }
+    .nav { font-family: system-ui, sans-serif; font-size: 0.85rem; margin-bottom: 12px; }
+    @media print { .nav { display: none; } body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="nav"><a href="./">← Play in the browser</a> · <a href="../../">The Deckhouse</a> · <a href="#" onclick="window.print();return false;">Print</a></div>
+  <h1>The Fox in the Forest</h1>
+  <p class="sub">Cheat sheet. Two players, about 30 minutes. Based on the game by Joshua Buergel.</p>
+  <h2>A round</h2>
+  <ol>
+    <li>33 cards: Bells, Keys and Moons, 1 to 11. Deal 13 each. Turn up the next card as the <b>decree</b>: its suit is trump. The rest is the deck.</li>
+    <li>Non-dealer leads. Follow suit if you can. Highest trump wins; with no trump, the higher card of the suit led wins. The winner leads next.</li>
+    <li>After 13 tricks, score. Swap dealer. First to 21 at the end of a round wins (a tie plays another round).</li>
+  </ol>
+  <h2>Scoring</h2>
+  <table>
+    <tr><th>Tricks</th><th>Title</th><th>Points</th></tr>
+    <tr><td>0–3</td><td>Humble</td><td>6</td></tr>
+    <tr><td>4 / 5 / 6</td><td>Defeated</td><td>1 / 2 / 3</td></tr>
+    <tr><td>7–9</td><td>Victorious</td><td>6</td></tr>
+    <tr><td>10–13</td><td>Greedy</td><td>0</td></tr>
+  </table>
+  <p>Plus 1 point for each 7 (Treasure) in the tricks you won.</p>
+  <h2>Odd cards</h2>
+  <table>
+    <tr><th>Card</th><th>Power</th></tr>
+    <tr><td>1 Swan</td><td>If you play this and lose the trick, you lead the next trick.</td></tr>
+    <tr><td>3 Fox</td><td>When you play this, you may exchange the decree card with a card from your hand.</td></tr>
+    <tr><td>5 Woodcutter</td><td>When you play this, draw 1 card, then put any 1 card from your hand on the bottom of the deck.</td></tr>
+    <tr><td>7 Treasure</td><td>The winner of the trick gets 1 point for each 7 in the trick.</td></tr>
+    <tr><td>9 Witch</td><td>If this is the only 9 in the trick, treat it as a trump.</td></tr>
+    <tr><td>11 Monarch</td><td>When you lead this, your opponent, if they have this suit, must play the 1 of it or their highest card of it.</td></tr>
+  </table>
+  <h2>Tips</h2>
+  <ul>
+    <li>Look at your hand and decide: Humble (few tricks) or Victorious (7–9). Both pay 6.</li>
+    <li>Stopping at 9 is hard with a hand full of winners; spend big cards early.</li>
+    <li>Watch your opponent's count. Pushing them into Greedy is as good as scoring yourself.</li>
+  </ul>
+</body>
+</html>
