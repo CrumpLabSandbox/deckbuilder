@@ -64,7 +64,7 @@ function render() {
   app.append(main);
   if (passTo !== null) {
     const p = G.players[passTo];
-    modalRoot.replaceChildren(h('div', { class: 'overlay' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' },
+    modalRoot.replaceChildren(h('div', { class: 'overlay pass' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' },
       h('h2', {}, `Pass to ${p.name}`), h('p', { class: 'sub' }, G.phase === 'pickrow' ? 'You need to choose a row to take.' : 'Choose your card for this turn.'),
       h('button', { class: 'primary', onclick: () => { viewer = passTo; passTo = null; modalRoot.replaceChildren(); render(); } }, `I'm ${p.name}`))));
   }

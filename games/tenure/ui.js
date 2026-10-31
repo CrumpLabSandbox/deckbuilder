@@ -257,7 +257,7 @@ function renderPending() {
 
 function renderPass() {
   const p = cur(G);
-  modalRoot.replaceChildren(h('div', { class: 'overlay' },
+  modalRoot.replaceChildren(h('div', { class: 'overlay pass' },
     h('div', { class: 'modal', style: 'max-width:480px;text-align:center' },
       h('h2', {}, `Pass to ${p.name}`),
       h('p', { class: 'sub' }, `${p.role.name}. Year ${G.year}.`),

@@ -61,3 +61,6 @@ input[type="text"] {
 .hub-header .title { font-family: var(--font-display); font-size: 1.2rem; }
 .muted { color: var(--muted); }
 .hub-header > span { display: flex; gap: 6px; }
+
+/* Hot-seat pass screens must hide the table completely, so nobody sees the next player's cards. */
+.overlay.pass { background: var(--bg) !important; }

@@ -42,7 +42,7 @@ function render() {
   right.append(renderSide(p, me));
   right.append(renderLog());
   main.append(left, right); app.append(main);
-  if (passScreen) modalRoot.replaceChildren(h('div', { class: 'overlay' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' }, h('h2', {}, `Pass to ${p.name}`), h('button', { class: 'primary', onclick: () => { passScreen = false; render(); } }, `I'm ${p.name}`))));
+  if (passScreen) modalRoot.replaceChildren(h('div', { class: 'overlay pass' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' }, h('h2', {}, `Pass to ${p.name}`), h('button', { class: 'primary', onclick: () => { passScreen = false; render(); } }, `I'm ${p.name}`))));
 }
 
 function renderPlayers(me) {

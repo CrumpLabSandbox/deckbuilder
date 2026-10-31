@@ -61,7 +61,7 @@ function render() {
   const log = h('div', { class: 'log' }); for (const e of G.log.slice(-40)) log.append(h('p', {}, e.msg)); lg.append(log);
   requestAnimationFrame(() => { log.scrollTop = log.scrollHeight; });
   app.append(lg);
-  if (passScreen) modalRoot.replaceChildren(h('div', { class: 'overlay' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' }, h('h2', {}, `Pass to ${me.name}`), h('button', { class: 'primary', onclick: () => { passScreen = false; render(); } }, `I'm ${me.name}`))));
+  if (passScreen) modalRoot.replaceChildren(h('div', { class: 'overlay pass' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' }, h('h2', {}, `Pass to ${me.name}`), h('button', { class: 'primary', onclick: () => { passScreen = false; render(); } }, `I'm ${me.name}`))));
 }
 
 function renderPlayer(p, mine) {

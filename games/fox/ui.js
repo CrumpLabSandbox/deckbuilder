@@ -73,7 +73,7 @@ function render() {
   main.append(h('div', {}, renderOpp(), renderTable(), renderMeter(), renderHand()), h('div', {}, renderAbilities(), renderLog()));
   app.append(main);
   if (passTo !== null) {
-    modalRoot.replaceChildren(h('div', { class: 'overlay' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' },
+    modalRoot.replaceChildren(h('div', { class: 'overlay pass' }, h('div', { class: 'modal', style: 'max-width:420px;text-align:center' },
       h('h2', {}, `Pass to ${G.players[passTo].name}`), h('p', { class: 'sub' }, 'Hands are hidden until then.'),
       h('button', { class: 'primary', onclick: () => { viewer = passTo; passTo = null; modalRoot.replaceChildren(); render(); } }, `I'm ${G.players[passTo].name}`))));
   }

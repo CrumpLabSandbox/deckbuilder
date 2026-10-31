@@ -105,4 +105,17 @@ export const GAMES = [
     length: '20-30 min',
     status: 'playable',
   },
+  {
+    slug: 'foxparty',
+    title: 'Fox in the Forest: Party',
+    tagline: 'An experimental 4-5 player variant of the two-player trick-taker.',
+    description:
+      'One suit per player (adding Acorns and Stars), ten tricks a round, and scoring bands re-tuned ' +
+      'by simulation so Humble, Victorious and Greedy all still matter with more people at the table. ' +
+      'Hot-seat or bots; everyone deals once.',
+    tags: ['4-5 players', 'variant', 'trick-taking', 'bots', 'hot-seat'],
+    players: '4-5',
+    length: '30-45 min',
+    status: 'wip',
+  },
 ];

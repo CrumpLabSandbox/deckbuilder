@@ -32,6 +32,8 @@ jobs:
           node games/euchre/sim.mjs --quick
           node games/take5/sim.mjs --quick
           node games/fox/sim.mjs --quick
+          node games/foxparty/sim.mjs --quick 4
+          node games/foxparty/sim.mjs --quick 5
       - uses: actions/configure-pages@v5
         with:
           enablement: true

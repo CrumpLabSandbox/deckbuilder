@@ -95,6 +95,13 @@ Play against an easy, normal or hard bot (hard samples the hidden cards and play
 each option), or hot-seat. `rules.html` is a printable cheat sheet. `node games/fox/sim.mjs 200`
 compares the bot levels.
 
+### Fox in the Forest: Party (experimental)
+
+A 4-5 player variant of Fox in the Forest: one suit per player (adding Acorns and Stars), ten
+cards each, multiplayer wordings for the Swan and Monarch, everyone deals once, and scoring bands
+chosen by simulation (`node games/foxparty/sim.mjs 200 4`, optionally with a bands JSON as the
+third argument to test alternatives).
+
 ## Local development
 
 Any static server works:
