@@ -102,6 +102,16 @@ cards each, multiplayer wordings for the Swan and Monarch, everyone deals once, 
 chosen by simulation (`node games/foxparty/sim.mjs 200 4`, optionally with a bands JSON as the
 third argument to test alternatives).
 
+### Pax Pamir
+
+The Pax Pamir (Second Edition) rules by Cole Wehrle, played with an original set of 96 court
+cards generated to the same structure (suits, ranks, regions, impact icons, card actions,
+patriots and prizes), six original events and four Dominance Checks. You play against 1-4 bots
+that look one action ahead. Teaching mode (switchable, remembered between visits) gives a guided
+tour, per-turn guidance, a suggested move with reasons, notes on rules as they come up, a
+dominance meter and a glossary. `node games/pamir/sim.mjs 60 3` checks that games end and seats
+are fair. The rules modal lists the points that could not be verified and the one house rule.
+
 ## Local development
 
 Any static server works:

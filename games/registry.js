@@ -118,4 +118,18 @@ export const GAMES = [
     length: '30-45 min',
     status: 'wip',
   },
+  {
+    slug: 'pamir',
+    title: 'Pax Pamir',
+    tagline: 'The Great Game, with a teaching mode that walks you through it.',
+    description:
+      'The Pax Pamir (Second Edition) rules on an original card set: a two-row market, courts, ' +
+      'tribes and spies, rulers and bribes, three coalitions and four Dominance Checks. Teaching ' +
+      'mode gives a guided tour, explains your options each turn, suggests a move and says why. ' +
+      'Switch it off any time. You against 1-4 bots.',
+    tags: ['2-5 players', 'teaching mode', 'bots', 'heavy'],
+    players: '1 + 1-4 bots',
+    length: '45-90 min',
+    status: 'playable',
+  },
 ];
