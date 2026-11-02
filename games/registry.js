@@ -132,4 +132,17 @@ export const GAMES = [
     length: '45-90 min',
     status: 'playable',
   },
+  {
+    slug: 'gofish',
+    title: 'Go Fish',
+    tagline: '"Do you have any sevens?" The classic, for 2-6 players.',
+    description:
+      'Ask for cards, go fishing, and collect books of four. Pass one device around the table and ' +
+      'fill empty seats with bots that remember a little or everything. Optional memory help shows ' +
+      'what the table has given away.',
+    tags: ['2-6 players', 'classic', 'family', 'hot-seat', 'bots'],
+    players: '2-6',
+    length: '10 min',
+    status: 'playable',
+  },
 ];

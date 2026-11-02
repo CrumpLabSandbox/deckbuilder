@@ -112,6 +112,13 @@ tour, per-turn guidance, a suggested move with reasons, notes on rules as they c
 dominance meter and a glossary. `node games/pamir/sim.mjs 60 3` checks that games end and seats
 are fair. The rules modal lists the points that could not be verified and the one house rule.
 
+### Go Fish
+
+The classic: 2-6 players, standard rules (7 cards each for 2-3 players, 5 for 4-6; a fished-up
+match earns another turn; books of four; most books wins). Play together on one device with pass
+screens, with bots that forget (easy), remember recent asks (normal) or remember everything
+(hard). `node games/gofish/sim.mjs 2000` checks every game ends with all 13 books.
+
 ## Local development
 
 Any static server works:
