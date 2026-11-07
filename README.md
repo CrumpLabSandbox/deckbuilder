@@ -119,6 +119,15 @@ match earns another turn; books of four; most books wins). Play together on one 
 screens, with bots that forget (easy), remember recent asks (normal) or remember everything
 (hard). `node games/gofish/sim.mjs 2000` checks every game ends with all 13 books.
 
+### Blackjack
+
+Casino blackjack for up to five seats against the dealer: a 6-deck shoe (1, 2 or 8 also
+available), dealer stands or hits soft 17, blackjack pays 3 to 2, double on any two cards and
+after splits, split up to four hands, late surrender, insurance, and a cut card at 75%.
+`strategy.js` holds basic strategy with a reason for every play; it drives the bots, the hints
+and the chart in the rules. `node games/blackjack/sim.mjs 600000` plays basic strategy and
+reports the house edge (about 0.3% for the default rules).
+
 ## Local development
 
 Any static server works:

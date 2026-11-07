@@ -145,4 +145,18 @@ export const GAMES = [
     length: '10 min',
     status: 'playable',
   },
+  {
+    slug: 'blackjack',
+    title: 'Blackjack',
+    tagline: 'Everyone against the dealer, with basic-strategy hints.',
+    description:
+      'Casino rules with a 6-deck shoe: blackjack pays 3 to 2, double, split, surrender and ' +
+      'insurance. Up to five seats share one device, and spare seats can be bots that play basic ' +
+      'strategy. Optional hints explain the best play for every hand; a strategy chart and an ' +
+      'optional card count are built in. Play money only.',
+    tags: ['1-5 players', 'classic', 'casino', 'hints', 'bots'],
+    players: '1-5',
+    length: 'any',
+    status: 'playable',
+  },
 ];
